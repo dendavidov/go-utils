@@ -1,0 +1,56 @@
+pre-commit:
+  parallel: true
+  commands:
+    gofmt:
+      glob: "*.go"
+      run: |
+        unformatted="$(gofmt -l {staged_files})"
+        if [ -n "$unformatted" ]; then
+          echo "gofmt: the following files need formatting:"
+          echo "$unformatted"
+          echo "run: gofmt -w ."
+          exit 1
+        fi
+    go-mod-tidy:
+      glob: "{go.mod,go.sum,**/*.go}"
+      run: |
+        cp go.mod go.mod.bak
+        cp go.sum go.sum.bak
+        go mod tidy
+        if ! diff -q go.mod go.mod.bak >/dev/null || ! diff -q go.sum go.sum.bak >/dev/null; then
+          mv go.mod.bak go.mod
+          mv go.sum.bak go.sum
+          echo "go.mod or go.sum is not tidy. run: go mod tidy"
+          exit 1
+        fi
+        rm -f go.mod.bak go.sum.bak
+    vet:
+      glob: "*.go"
+      run: go vet ./...
+    golangci-lint:
+      glob: "*.go"
+      run: |
+        if command -v golangci-lint >/dev/null 2>&1; then
+          exec golangci-lint run ./...
+        fi
+        echo "golangci-lint not found on PATH"
+        echo "install: go install github.com/golangci/golangci-lint/v2/cmd/golangci-lint@latest"
+        echo "         (or see https://golangci-lint.run/welcome/install/)"
+        exit 1
+
+commit-msg:
+  commands:
+    conventional-commits:
+      run: |
+        if ! head -n 1 {1} | grep -Eq '^(feat|fix|docs|style|refactor|perf|test|build|ci|chore|revert)(\([a-z0-9/_.-]+\))?!?: .+'; then
+          echo "commit-msg: subject must follow Conventional Commits"
+          echo "  format: <type>(<scope>)?: <description>"
+          echo "  types:  feat, fix, docs, style, refactor, perf, test, build, ci, chore, revert"
+          echo "  use 'type!:' or 'type(scope)!:' for a breaking change"
+          exit 1
+        fi
+
+pre-push:
+  commands:
+    test:
+      run: go test -race ./...

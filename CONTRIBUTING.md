@@ -21,6 +21,23 @@ Lint (install [golangci-lint](https://golangci-lint.run/) v2 locally):
 golangci-lint run ./...
 ```
 
+## Git hooks
+
+This repo uses [Lefthook](https://lefthook.dev/) for local git hooks. One-time setup after cloning:
+
+```bash
+go install github.com/evilmartians/lefthook/v2@latest
+lefthook install
+```
+
+Hooks:
+
+- **pre-commit** — `gofmt -l`, `go vet`, `go mod tidy` check, and `golangci-lint run`.
+- **commit-msg** — enforces [Conventional Commits](https://www.conventionalcommits.org/) (required for release-please).
+- **pre-push** — `go test -race ./...`.
+
+To bypass hooks in an emergency use `git commit --no-verify` / `git push --no-verify`, but prefer fixing the underlying issue.
+
 ## Commits and releases
 
 Use [Conventional Commits](https://www.conventionalcommits.org/) (for example `feat:`, `fix:`, `chore:`, `docs:`, `ci:`). Breaking API changes should use a `!` after the type, e.g. `feat!: change Claims shape`.
