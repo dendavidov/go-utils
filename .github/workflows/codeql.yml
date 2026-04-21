@@ -11,6 +11,9 @@ on:
 permissions:
   contents: read
   security-events: write
+  # analyze step calls the workflow-runs API (telemetry / status); without this
+  # GITHUB_TOKEN gets "Resource not accessible by integration".
+  actions: read
 
 jobs:
   analyze:
