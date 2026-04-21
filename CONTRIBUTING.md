@@ -6,7 +6,7 @@ Thanks for helping improve this project.
 
 Requirements:
 
-- Go **1.26.2** or newer (see `go.mod`; older **1.25.x** is exercised in CI).
+- Go **1.25** or newer (see `go.mod`; `toolchain go1.26.2` is pinned for consistency). CI runs against both 1.25 and 1.26.
 
 Commands:
 
