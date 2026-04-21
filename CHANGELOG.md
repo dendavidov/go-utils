@@ -9,7 +9,5 @@ Release notes after the initial modernization are produced by
 [release-please](https://github.com/googleapis/release-please) from
 [Conventional Commits](https://www.conventionalcommits.org/).
 
-## [Unreleased]
+<!-- release-please will populate this file starting from the first release. -->
 
-- Modular layout: `pkg/jwt` library and `cmd/jwt-token` CLI
-- Go 1.26.2, `github.com/golang-jwt/jwt/v5`
