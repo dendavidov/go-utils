@@ -30,7 +30,8 @@ archives:
         format: zip
 
 checksum:
-  name: "{{ .ProjectName }}_{{ .Version }}_checksums.txt"
+  # GoReleaser v2: use name_template (field `name` was removed).
+  name_template: "{{ .ProjectName }}_{{ .Version }}_checksums.txt"
 
 snapshot:
   version_template: "{{ incpatch .Version }}-next"
