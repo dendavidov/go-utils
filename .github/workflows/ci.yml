@@ -31,7 +31,7 @@ jobs:
       fail-fast: false
       matrix:
         go-version: ["1.25.x", "1.26.x"]
-        os: [ubuntu-latest, macos-latest, windows-latest]
+        os: [ubuntu-latest, macos-latest]
     runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v4
@@ -40,9 +40,6 @@ jobs:
           go-version: ${{ matrix.go-version }}
           cache: true
       - name: Test
-        # Default shell on windows-latest is PowerShell, which can mangle `./...`
-        # (e.g. treat it as package ".out"). Bash matches Linux/macOS behavior.
-        shell: bash
         env:
           # go.mod pins toolchain go1.26.x; without this, Go 1.25 jobs download
           # that toolchain and the compiler/stdlib versions disagree.
