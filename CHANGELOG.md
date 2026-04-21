@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.0.1](https://github.com/dendavidov/go-utils/compare/v1.0.0...v1.0.1) (2026-04-21)
+
+
+### Bug Fixes
+
+* **release:** GoReleaser v2 checksum field and goreleaser token ([8e0f9d7](https://github.com/dendavidov/go-utils/commit/8e0f9d7a23c777999d71cb6341bccd60b620e3d8))
+
 ## 1.0.0 (2026-04-21)
 
 
