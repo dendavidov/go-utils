@@ -43,6 +43,11 @@ func ParsePrivateKeyFromBase64(b64 string) (*rsa.PrivateKey, error) {
 }
 
 // GenerateToken signs claims with RS256 using the given private key and TTL from now.
+//
+// GenerateToken always sets ExpiresAt, IssuedAt, and NotBefore based on ttl and
+// the current time; any values the caller set for those three fields are
+// overwritten. Other RegisteredClaims fields (Issuer, Subject, Audience, ID)
+// are preserved.
 func GenerateToken(priv *rsa.PrivateKey, c Claims, ttl time.Duration) (string, error) {
 	if priv == nil {
 		return "", errors.New("jwt: private key is nil")
@@ -51,12 +56,9 @@ func GenerateToken(priv *rsa.PrivateKey, c Claims, ttl time.Duration) (string, e
 		return "", errors.New("jwt: ttl must be positive")
 	}
 	now := time.Now()
-	exp := now.Add(ttl)
-	c.RegisteredClaims = jwtv5.RegisteredClaims{
-		ExpiresAt: jwtv5.NewNumericDate(exp),
-		IssuedAt:  jwtv5.NewNumericDate(now),
-		NotBefore: jwtv5.NewNumericDate(now),
-	}
+	c.IssuedAt = jwtv5.NewNumericDate(now)
+	c.NotBefore = jwtv5.NewNumericDate(now)
+	c.ExpiresAt = jwtv5.NewNumericDate(now.Add(ttl))
 	t := jwtv5.NewWithClaims(jwtv5.SigningMethodRS256, &c)
 	return t.SignedString(priv)
 }

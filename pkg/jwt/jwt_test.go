@@ -84,6 +84,48 @@ func TestGenerateTokenNonPositiveTTL(t *testing.T) {
 	}
 }
 
+func TestGenerateTokenPreservesCallerRegisteredClaims(t *testing.T) {
+	priv, err := rsa.GenerateKey(rand.Reader, 2048)
+	if err != nil {
+		t.Fatal(err)
+	}
+	in := Claims{
+		ID:    "user-1",
+		Email: "a@example.com",
+	}
+	in.Issuer = "issuer.example"
+	in.Subject = "sub-42"
+	in.Audience = []string{"aud-1", "aud-2"}
+	in.RegisteredClaims.ID = "jti-123"
+
+	token, err := GenerateToken(priv, in, time.Hour)
+	if err != nil {
+		t.Fatalf("GenerateToken: %v", err)
+	}
+	got, err := ParseToken(token, &priv.PublicKey)
+	if err != nil {
+		t.Fatalf("ParseToken: %v", err)
+	}
+	if got.Issuer != "issuer.example" {
+		t.Errorf("Issuer preserved: got %q", got.Issuer)
+	}
+	if got.Subject != "sub-42" {
+		t.Errorf("Subject preserved: got %q", got.Subject)
+	}
+	if len(got.Audience) != 2 || got.Audience[0] != "aud-1" || got.Audience[1] != "aud-2" {
+		t.Errorf("Audience preserved: got %#v", got.Audience)
+	}
+	if got.RegisteredClaims.ID != "jti-123" {
+		t.Errorf("jti preserved: got %q", got.RegisteredClaims.ID)
+	}
+	if got.ID != "user-1" {
+		t.Errorf("outer ID preserved: got %q", got.ID)
+	}
+	if got.ExpiresAt == nil || got.IssuedAt == nil || got.NotBefore == nil {
+		t.Error("exp/iat/nbf should all be set")
+	}
+}
+
 func TestParsePrivateKeyFromBase64Invalid(t *testing.T) {
 	_, err := ParsePrivateKeyFromBase64("not-valid-base64!!!")
 	if err == nil {
