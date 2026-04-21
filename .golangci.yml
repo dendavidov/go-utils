@@ -13,14 +13,10 @@ linters:
     - staticcheck
     - unused
     - gosec
-
-linters-settings:
-  revive:
-    rules:
-      - name: exported
-        arguments:
-          - checkPrivateReceivers
-          - sayRepetitiveInsteadOfStutters
-
-issues:
-  exclude-use-default: false
+  settings:
+    revive:
+      rules:
+        - name: exported
+          arguments:
+            - checkPrivateReceivers
+            - sayRepetitiveInsteadOfStutters
