@@ -3,6 +3,7 @@
 Small Go utilities with a versioned module and conventional releases.
 
 [![CI](https://github.com/dendavidov/go-utils/actions/workflows/ci.yml/badge.svg)](https://github.com/dendavidov/go-utils/actions/workflows/ci.yml)
+[![GitHub Release](https://img.shields.io/github/v/release/dendavidov/go-utils?sort=semver)](https://github.com/dendavidov/go-utils/releases)
 [![Go Reference](https://pkg.go.dev/badge/github.com/dendavidov/go-utils.svg)](https://pkg.go.dev/github.com/dendavidov/go-utils)
 [![Go Report Card](https://goreportcard.com/badge/github.com/dendavidov/go-utils)](https://goreportcard.com/report/github.com/dendavidov/go-utils)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
