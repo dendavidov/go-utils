@@ -1,5 +1,5 @@
-module jwt-token
+module github.com/dendavidov/go-utils
 
-go 1.20
+go 1.26.2
 
-require github.com/golang-jwt/jwt v3.2.2+incompatible
+require github.com/golang-jwt/jwt/v5 v5.3.0
