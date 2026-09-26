@@ -20,7 +20,7 @@ jobs:
       tag_name: ${{ steps.rp.outputs.tag_name }}
     steps:
       - id: rp
-        uses: googleapis/release-please-action@v4
+        uses: googleapis/release-please-action@v5
         with:
           # Use github.token (not secrets.GITHUB_TOKEN — that name does not exist).
           # If the repo blocks workflow PRs, enable: Settings → Actions → General →
